@@ -21,33 +21,16 @@ const wss = new WebSocket.Server({ server });
 const udpRx = dgram.createSocket('udp4');
 const udpTx = dgram.createSocket('udp4');
 
-// Active Simulation State
-let simState = {
-  vOut: 0.0,
-  iL: 0.0,
-  ref: 12.0,
-  duty: 0.5,
-  noise: 0.0,
-  time: 0.0
-};
+// State vectors (6 channels each)
+let txBaselines = [10.0, 20.0, 30.0, 40.0, 50.0, 0.0]; // Base values
+let txModulated = [false, false, false, false, false, false]; // Toggle modulation
+let rxValues = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // Received values
 
-// LabVIEW Command State (Received from LabVIEW)
-let labviewState = {
-  v1: 0.0,
-  v2: 0.0,
-  v3: 0.0,
-  v4: 0.0,
-  v5: 0.0,
-  v6: 0.0
-};
+let simTime = 0.0;
 
-// Simulation Configuration (controlled from web UI)
+// Universal Configuration
 let config = {
-  intervalMs: 10,  // Default to 10ms (100 Hz)
-  vRefOffset: 12.0,
-  dutyOffset: 0.5,
-  noiseMagnitude: 0.1,
-  loadResistor: 10.0,
+  intervalMs: 10,  // Rate limit
   isRunning: true
 };
 
@@ -65,18 +48,13 @@ function broadcast(data) {
 udpRx.on('message', (msg) => {
   if (msg.length === 48) {
     try {
-      // Read doubles as Big Endian
-      labviewState.v1 = msg.readDoubleBE(0);
-      labviewState.v2 = msg.readDoubleBE(8);
-      labviewState.v3 = msg.readDoubleBE(16);
-      labviewState.v4 = msg.readDoubleBE(24);
-      labviewState.v5 = msg.readDoubleBE(32);
-      labviewState.v6 = msg.readDoubleBE(40);
-
-      // Notify Web UI about received LabVIEW data
+      for (let i = 0; i < 6; i++) {
+        rxValues[i] = msg.readDoubleBE(i * 8);
+      }
+      // Broadcast received LabVIEW values to Web UI
       broadcast({
-        type: 'labview_data',
-        values: [labviewState.v1, labviewState.v2, labviewState.v3, labviewState.v4, labviewState.v5, labviewState.v6]
+        type: 'rx_data',
+        values: rxValues
       });
     } catch (err) {
       console.error('Error parsing LabVIEW UDP packet:', err);
@@ -88,13 +66,13 @@ udpRx.on('message', (msg) => {
 
 udpRx.on('listening', () => {
   const address = udpRx.address();
-  console.log(`Listening for LabVIEW UDP on port ${address.port}`);
+  console.log(`Listening for incoming UDP on port ${address.port}`);
 });
 
 // Bind UDP Rx Socket
 udpRx.bind(UDP_LISTEN_PORT);
 
-// Main Simulation Loop
+// Main Abstract Simulation/Generation Loop
 let simInterval = null;
 
 function startSimulation() {
@@ -103,35 +81,38 @@ function startSimulation() {
   simInterval = setInterval(() => {
     if (!config.isRunning) return;
 
-    const t = simState.time;
     const intervalSec = config.intervalMs / 1000.0;
+    const currentTx = [];
 
-    // 1. Generate 6 variables simulating typical HIL/converter signals
-    simState.vOut = config.vRefOffset + 2.0 * Math.sin(2 * Math.PI * 50 * t);
-    simState.iL = (config.vRefOffset / config.loadResistor) + 0.5 * Math.sin(2 * Math.PI * 50 * t - Math.PI / 4) + (Math.random() - 0.5) * config.noiseMagnitude;
-    simState.ref = config.vRefOffset;
-    simState.duty = config.dutyOffset + 0.1 * Math.sin(2 * Math.PI * 10 * t);
-    simState.noise = (Math.random() - 0.5) * config.noiseMagnitude;
-    simState.time = t + intervalSec;
+    // Calculate dynamic state for each of the 6 channels
+    for (let i = 0; i < 6; i++) {
+      if (txModulated[i]) {
+        // Add a 1 Hz sine wave modulation with an amplitude of 10% of baseline (or default amplitude of 5.0)
+        const amplitude = txBaselines[i] !== 0 ? Math.abs(txBaselines[i]) * 0.2 : 5.0;
+        currentTx[i] = txBaselines[i] + amplitude * Math.sin(2 * Math.PI * 1.0 * simTime);
+      } else {
+        currentTx[i] = txBaselines[i];
+      }
+    }
 
-    // 2. Pack as 6 double-precision floats (8 bytes each = 48 bytes total, Big Endian)
+    simTime += intervalSec;
+
+    // Pack as 6 double-precision floats (48 bytes total, Big Endian)
     const buffer = Buffer.alloc(48);
-    buffer.writeDoubleBE(simState.vOut, 0);
-    buffer.writeDoubleBE(simState.iL, 8);
-    buffer.writeDoubleBE(simState.ref, 16);
-    buffer.writeDoubleBE(simState.duty, 24);
-    buffer.writeDoubleBE(simState.noise, 32);
-    buffer.writeDoubleBE(simState.time, 40);
+    for (let i = 0; i < 6; i++) {
+      buffer.writeDoubleBE(currentTx[i], i * 8);
+    }
 
-    // 3. Send via UDP to LabVIEW
+    // Send UDP packet to LabVIEW
     udpTx.send(buffer, UDP_SEND_PORT, UDP_TARGET_HOST, (err) => {
-      if (err) console.error('Error sending UDP to LabVIEW:', err);
+      if (err) console.error('Error sending UDP payload:', err);
     });
 
-    // 4. Stream simulation parameters to the browser UI
+    // Stream the active output state to the browser
     broadcast({
-      type: 'sim_data',
-      values: [simState.vOut, simState.iL, simState.ref, simState.duty, simState.noise, simState.time]
+      type: 'tx_data',
+      values: currentTx,
+      time: simTime
     });
 
   }, config.intervalMs);
@@ -141,28 +122,33 @@ function startSimulation() {
 wss.on('connection', (ws) => {
   console.log('Web client connected.');
 
-  // Send current configuration state to UI on connect
+  // Push current configuration/baselines/states
   ws.send(JSON.stringify({
-    type: 'config',
-    config: config
+    type: 'init',
+    config: config,
+    baselines: txBaselines,
+    modulated: txModulated,
+    rxValues: rxValues
   }));
 
-  // Handle incoming control messages from the browser UI
+  // Handle updates from browser dashboard
   ws.on('message', (message) => {
     try {
       const msg = JSON.parse(message);
-      if (msg.type === 'update_config') {
-        // Update local configuration state
+      if (msg.type === 'update_tx') {
+        txBaselines[msg.channel] = msg.value;
+        console.log(`Updated Tx Channel ${msg.channel + 1} value to ${msg.value}`);
+      } 
+      else if (msg.type === 'update_modulation') {
+        txModulated[msg.channel] = msg.value;
+        console.log(`Updated Tx Channel ${msg.channel + 1} modulation: ${msg.value}`);
+      }
+      else if (msg.type === 'update_config') {
         Object.assign(config, msg.config);
-
-        // If the interval/rate has changed, restart the simulation timer
         if (msg.config.intervalMs !== undefined) {
           startSimulation();
         }
-        
-        console.log('Updated simulation config:', config);
-        
-        // Broadcast new config to all clients
+        // Sync configuration state
         broadcast({
           type: 'config',
           config: config
@@ -183,5 +169,5 @@ startSimulation();
 
 // Start HTTP Server
 server.listen(PORT, () => {
-  console.log(`Web interface running at http://localhost:${PORT}`);
+  console.log(`Universal Web UDP Console running at http://localhost:${PORT}`);
 });

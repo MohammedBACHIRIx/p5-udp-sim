@@ -1,56 +1,37 @@
-// State variables
 let ws = null;
 
-// Simulation Configuration State
+// Global state mirrors
 let config = {
   intervalMs: 10,
-  vRefOffset: 12.0,
-  dutyOffset: 0.5,
-  noiseMagnitude: 0.1,
-  loadResistor: 10.0,
   isRunning: true
 };
+let txBaselines = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+let txModulated = [false, false, false, false, false, false];
 
-// UI Elements (Telemetry Sent)
+// UI Telemetry indicators
 const connDot = document.getElementById('connection-dot');
 const connText = document.getElementById('connection-text');
-const valVOut = document.getElementById('val-v_out');
-const valIL = document.getElementById('val-i_l');
-const valVRef = document.getElementById('val-v_ref');
-const valDuty = document.getElementById('val-duty');
-const valNoise = document.getElementById('val-noise');
 const valTime = document.getElementById('val-time');
-
-// Fillbar Trend Indicators
-const trendVOut = document.getElementById('trend-v_out');
-const trendIL = document.getElementById('trend-i_l');
-const trendVRef = document.getElementById('trend-v_ref');
-const trendDuty = document.getElementById('trend-duty');
-
-// UI Elements (Telemetry Received from LabVIEW)
-const lvVal1 = document.getElementById('lv-val-1');
-const lvVal2 = document.getElementById('lv-val-2');
-const lvVal3 = document.getElementById('lv-val-3');
-const lvVal4 = document.getElementById('lv-val-4');
-const lvVal5 = document.getElementById('lv-val-5');
-const lvVal6 = document.getElementById('lv-val-6');
-
-// Control Inputs
-const sliderInterval = document.getElementById('slider-interval');
-const sliderVRef = document.getElementById('slider-v_ref');
-const sliderDuty = document.getElementById('slider-duty');
-const sliderLoad = document.getElementById('slider-load');
-const sliderNoise = document.getElementById('slider-noise');
 const btnToggle = document.getElementById('btn-toggle');
-
+const sliderInterval = document.getElementById('slider-interval');
 const lblInterval = document.getElementById('ctrl-interval-val');
-const lblVRef = document.getElementById('ctrl-v_ref-val');
-const lblDuty = document.getElementById('ctrl-duty-val');
-const lblLoad = document.getElementById('ctrl-load-val');
-const lblNoise = document.getElementById('ctrl-noise-val');
 
+// Channel elements mapping loops
+const txValElements = [];
+const rxValElements = [];
+const sliderElements = [];
+const checkboxElements = [];
+const labelElements = [];
 
-// Establish WebSocket Connection
+for (let i = 0; i < 6; i++) {
+  txValElements.push(document.getElementById(`tx-val-${i}`));
+  rxValElements.push(document.getElementById(`rx-val-${i}`));
+  sliderElements.push(document.getElementById(`slide-tx-${i}`));
+  checkboxElements.push(document.getElementById(`mod-tx-${i}`));
+  labelElements.push(document.getElementById(`lbl-tx-${i}`));
+}
+
+// Establish WebSocket connection
 function connect() {
   const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   ws = new WebSocket(`${wsProtocol}//${window.location.host}`);
@@ -73,41 +54,35 @@ function connect() {
   ws.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data);
-      
-      // Update local configuration state from server settings
-      if (data.type === 'config') {
+
+      if (data.type === 'init') {
         config = data.config;
-        updateUISliders();
-      }
-
-      // Incoming simulation state sent to LabVIEW
-      else if (data.type === 'sim_data') {
-        const [vOut, iL, vRef, duty, noise, simTime] = data.values;
-
-        // Update readouts
-        valVOut.innerText = vOut.toFixed(2);
-        valIL.innerText = iL.toFixed(2);
-        valVRef.innerText = vRef.toFixed(2);
-        valDuty.innerText = (duty * 100).toFixed(1);
-        valNoise.innerText = noise.toFixed(3);
-        valTime.innerText = `${simTime.toFixed(3)} s`;
-
-        // Update fill bar widths
-        trendVOut.style.width = `${Math.min(100, (vOut / 24) * 100)}%`;
-        trendIL.style.width = `${Math.min(100, (iL / 10) * 100)}%`;
-        trendVRef.style.width = `${Math.min(100, (vRef / 24) * 100)}%`;
-        trendDuty.style.width = `${Math.min(100, duty * 100)}%`;
-      }
-
-      // Incoming data packets parsed from LabVIEW
-      else if (data.type === 'labview_data') {
-        const [lv1, lv2, lv3, lv4, lv5, lv6] = data.values;
-        lvVal1.innerText = lv1.toFixed(3);
-        lvVal2.innerText = lv2.toFixed(3);
-        lvVal3.innerText = lv3.toFixed(3);
-        lvVal4.innerText = lv4.toFixed(3);
-        lvVal5.innerText = lv5.toFixed(3);
-        lvVal6.innerText = lv6.toFixed(3);
+        txBaselines = data.baselines;
+        txModulated = data.modulated;
+        
+        // Update sliders & inputs in UI
+        updateUISettings();
+        // Set initial Rx indicators
+        updateRxIndicators(data.rxValues);
+      } 
+      else if (data.type === 'config') {
+        config = data.config;
+        updateUISettings();
+      } 
+      // Telemetry sent from Server to LabVIEW
+      else if (data.type === 'tx_data') {
+        for (let i = 0; i < 6; i++) {
+          if (txValElements[i]) {
+            txValElements[i].innerText = data.values[i].toFixed(3);
+          }
+        }
+        if (valTime) {
+          valTime.innerText = `${data.time.toFixed(3)} s`;
+        }
+      } 
+      // Telemetry received from LabVIEW
+      else if (data.type === 'rx_data') {
+        updateRxIndicators(data.values);
       }
     } catch (e) {
       console.error('Error handling WebSocket message:', e);
@@ -115,22 +90,30 @@ function connect() {
   };
 }
 
-// Update UI elements to reflect remote config
-function updateUISliders() {
+function updateRxIndicators(values) {
+  for (let i = 0; i < 6; i++) {
+    if (rxValElements[i] && values[i] !== undefined) {
+      rxValElements[i].innerText = values[i].toFixed(3);
+    }
+  }
+}
+
+// Update control widgets to match remote configuration state
+function updateUISettings() {
   sliderInterval.value = config.intervalMs;
   lblInterval.innerText = config.intervalMs;
-  
-  sliderVRef.value = config.vRefOffset;
-  lblVRef.innerText = config.vRefOffset.toFixed(1);
-  
-  sliderDuty.value = config.dutyOffset * 100.0;
-  lblDuty.innerText = (config.dutyOffset * 100.0).toFixed(1);
-  
-  sliderLoad.value = config.loadResistor;
-  lblLoad.innerText = config.loadResistor.toFixed(1);
-  
-  sliderNoise.value = config.noiseMagnitude;
-  lblNoise.innerText = config.noiseMagnitude.toFixed(2);
+
+  for (let i = 0; i < 6; i++) {
+    if (sliderElements[i]) {
+      sliderElements[i].value = txBaselines[i];
+    }
+    if (labelElements[i]) {
+      labelElements[i].innerText = txBaselines[i].toFixed(1);
+    }
+    if (checkboxElements[i]) {
+      checkboxElements[i].checked = txModulated[i];
+    }
+  }
 
   if (config.isRunning) {
     btnToggle.innerText = 'PAUSE';
@@ -141,7 +124,7 @@ function updateUISliders() {
   }
 }
 
-// Sends updated configurations to the Node.js server
+// Websocket transmitter functions
 function sendConfigChange(updatedKeys) {
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.send(JSON.stringify({
@@ -151,35 +134,50 @@ function sendConfigChange(updatedKeys) {
   }
 }
 
-// Interactive Input Handlers
+function sendTxValue(channel, val) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({
+      type: 'update_tx',
+      channel: channel,
+      value: val
+    }));
+  }
+}
+
+function sendModulationChange(channel, isModulated) {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({
+      type: 'update_modulation',
+      channel: channel,
+      value: isModulated
+    }));
+  }
+}
+
+// Wire up events dynamically using array loops
+for (let i = 0; i < 6; i++) {
+  if (sliderElements[i]) {
+    sliderElements[i].addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      labelElements[i].innerText = val.toFixed(1);
+      txBaselines[i] = val;
+      sendTxValue(i, val);
+    });
+  }
+
+  if (checkboxElements[i]) {
+    checkboxElements[i].addEventListener('change', (e) => {
+      const isChecked = e.target.checked;
+      txModulated[i] = isChecked;
+      sendModulationChange(i, isChecked);
+    });
+  }
+}
+
 sliderInterval.addEventListener('input', (e) => {
   const val = parseInt(e.target.value);
   lblInterval.innerText = val;
   sendConfigChange({ intervalMs: val });
-});
-
-sliderVRef.addEventListener('input', (e) => {
-  const val = parseFloat(e.target.value);
-  lblVRef.innerText = val.toFixed(1);
-  sendConfigChange({ vRefOffset: val });
-});
-
-sliderDuty.addEventListener('input', (e) => {
-  const val = parseFloat(e.target.value);
-  lblDuty.innerText = val.toFixed(1);
-  sendConfigChange({ dutyOffset: val / 100.0 });
-});
-
-sliderLoad.addEventListener('input', (e) => {
-  const val = parseFloat(e.target.value);
-  lblLoad.innerText = val.toFixed(1);
-  sendConfigChange({ loadResistor: val });
-});
-
-sliderNoise.addEventListener('input', (e) => {
-  const val = parseFloat(e.target.value);
-  lblNoise.innerText = val.toFixed(2);
-  sendConfigChange({ noiseMagnitude: val });
 });
 
 btnToggle.addEventListener('click', () => {
