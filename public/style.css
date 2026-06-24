@@ -1,20 +1,20 @@
-/* Core CSS Variable Design Tokens */
+/* Core CSS Variable Design Tokens (Desaturated Muted Base, Sharp Semantic Accents) */
 :root {
-  --bg-color: #0d0f17;
-  --panel-bg: rgba(22, 28, 45, 0.45);
-  --panel-border: rgba(255, 255, 255, 0.08);
+  --bg-color: #0b0c10;
+  --panel-bg: #141620;
+  --panel-border: #232738;
   --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
+  --text-secondary: #8e95a5;
   
-  /* Neon Palette */
-  --cyan: #00f2fe;
-  --cyan-glow: rgba(0, 242, 254, 0.4);
-  --magenta: #f35588;
-  --magenta-glow: rgba(243, 85, 136, 0.4);
-  --green: #05c46b;
-  --green-glow: rgba(5, 196, 107, 0.4);
-  --yellow: #ffc048;
-  --yellow-glow: rgba(255, 192, 72, 0.4);
+  /* Semantic Accents */
+  --cyan: #00e5ff;
+  --cyan-glow: rgba(0, 229, 255, 0.2);
+  --magenta: #ff4785;
+  --magenta-glow: rgba(255, 71, 133, 0.2);
+  --green: #00d27a;
+  --green-glow: rgba(0, 210, 122, 0.2);
+  --yellow: #ffb300;
+  --yellow-glow: rgba(255, 179, 0, 0.2);
 }
 
 /* Reset and Layout */
@@ -31,47 +31,6 @@ body {
   height: 100vh;
   overflow: hidden;
   position: relative;
-}
-
-/* Dynamic Ambient Glow Circles */
-.glow-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.glow-circle {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.15;
-  animation: floatGlow 20s infinite ease-in-out alternate;
-}
-
-.glow-circle.cyan {
-  background: var(--cyan);
-  width: 400px;
-  height: 400px;
-  top: -100px;
-  right: -50px;
-  animation-duration: 25s;
-}
-
-.glow-circle.magenta {
-  background: var(--magenta);
-  width: 500px;
-  height: 500px;
-  bottom: -150px;
-  left: -100px;
-}
-
-@keyframes floatGlow {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(60px, 40px) scale(1.15); }
 }
 
 /* Dashboard Wrapper */
@@ -118,7 +77,7 @@ h1 {
   gap: 0.5rem;
   background: rgba(255, 255, 255, 0.04);
   padding: 0.3rem 0.7rem;
-  border-radius: 20px;
+  border-radius: 12px;
   border: 1px solid var(--panel-border);
   font-size: 0.75rem;
   font-weight: 600;
@@ -133,19 +92,12 @@ h1 {
 
 .dot.connected {
   background-color: var(--green);
-  box-shadow: 0 0 10px var(--green-glow);
+  box-shadow: 0 0 8px var(--green-glow);
 }
 
 .dot.disconnected {
   background-color: var(--magenta);
-  box-shadow: 0 0 10px var(--magenta-glow);
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(0.95); opacity: 0.6; }
-  50% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.6; }
+  box-shadow: 0 0 8px var(--magenta-glow);
 }
 
 /* Widescreen Content Layout Split */
@@ -196,27 +148,24 @@ h1 {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: var(--cyan);
-  text-shadow: 0 0 8px var(--cyan-glow);
 }
 
 .section-title.text-magenta {
   color: var(--magenta);
-  text-shadow: 0 0 8px var(--magenta-glow);
 }
 
-/* Glassmorphism Panel Card Base */
+/* Crisp Panel Card (Restrained, Flat Design) */
 .card {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 0.6rem 1rem;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.3);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-  border-color: rgba(0, 242, 254, 0.2);
+  border-color: rgba(0, 229, 255, 0.25);
 }
 
 /* Readouts Grid - 3 Columns for Side-by-Side View */
@@ -240,9 +189,10 @@ h1 {
 }
 
 .value {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.45rem;
+  font-family: monospace;
+  font-size: 1.4rem;
   font-weight: 700;
+  color: var(--cyan);
 }
 
 .font-mono {
@@ -250,14 +200,17 @@ h1 {
   font-size: 1.35rem;
 }
 
+.lv-card .value {
+  color: var(--magenta);
+}
+
 /* LabVIEW Specific Readouts */
 .lv-card {
-  border-color: rgba(243, 85, 136, 0.15);
+  border-color: rgba(255, 71, 133, 0.15);
 }
 
 .lv-card:hover {
-  border-color: rgba(243, 85, 136, 0.4);
-  box-shadow: 0 0 10px rgba(243, 85, 136, 0.1);
+  border-color: rgba(255, 71, 133, 0.4);
 }
 
 /* Controls Panel (Right Side) */
@@ -289,7 +242,7 @@ h1 {
   font-weight: 700;
   font-size: 0.75rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   outline: none;
 }
 
@@ -301,7 +254,6 @@ h1 {
 
 .btn-primary:hover {
   background: #0be881;
-  box-shadow: 0 0 15px var(--green-glow);
 }
 
 .btn-paused {
@@ -312,7 +264,11 @@ h1 {
 
 .btn-paused:hover {
   background: #ff5e97;
-  box-shadow: 0 0 15px var(--magenta-glow);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
 }
 
 .control-help {
@@ -352,6 +308,7 @@ h1 {
 }
 
 .control-val {
+  font-family: monospace;
   color: var(--cyan);
 }
 
@@ -367,12 +324,17 @@ h1 {
   padding: 0.1rem 0.3rem;
   border-radius: 4px;
   border: 1px solid var(--panel-border);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .toggle-switch:hover {
   border-color: var(--cyan);
   color: var(--text-primary);
+}
+
+.toggle-switch:focus-within {
+  outline: 2px solid var(--cyan);
+  outline-offset: 1px;
 }
 
 .toggle-switch input[type="checkbox"] {
@@ -399,6 +361,11 @@ h1 {
   transition: background 0.3s;
 }
 
+.neon-slider:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
 .neon-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -406,7 +373,7 @@ h1 {
   height: 12px;
   border-radius: 50%;
   background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan-glow);
+  box-shadow: 0 0 6px var(--cyan-glow);
   cursor: pointer;
   transition: transform 0.1s ease;
 }
@@ -417,22 +384,22 @@ h1 {
 
 .neon-slider.v_ref::-webkit-slider-thumb {
   background: var(--yellow);
-  box-shadow: 0 0 8px var(--yellow-glow);
+  box-shadow: 0 0 6px var(--yellow-glow);
 }
 
 .neon-slider.load::-webkit-slider-thumb {
   background: var(--green);
-  box-shadow: 0 0 8px var(--green-glow);
+  box-shadow: 0 0 6px var(--green-glow);
 }
 
 .neon-slider.speed::-webkit-slider-thumb {
   background: #a55eea;
-  box-shadow: 0 0 8px rgba(165, 94, 234, 0.4);
+  box-shadow: 0 0 6px rgba(165, 94, 234, 0.4);
 }
 
 .neon-slider.noise::-webkit-slider-thumb {
   background: var(--magenta);
-  box-shadow: 0 0 8px var(--magenta-glow);
+  box-shadow: 0 0 6px var(--magenta-glow);
 }
 
 /* Status Box */
