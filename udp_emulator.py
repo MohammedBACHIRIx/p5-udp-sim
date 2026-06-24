@@ -12,8 +12,8 @@ LISTEN_HOST = "0.0.0.0"  # Listen on all local interfaces
 LISTEN_PORT = 25000
 INTERVAL_SEC = 0.5       # 500 ms (2 Hz frequency)
 
-# Endianness: '<' is Little-Endian, '>' is Big-Endian
-BYTE_ORDER = '<'
+# Endianness: '>' is Big-Endian, '<' is Little-Endian
+BYTE_ORDER = '>'
 
 # Initialize sockets
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
