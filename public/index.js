@@ -31,6 +31,68 @@ for (let i = 0; i < 6; i++) {
   labelElements.push(document.getElementById(`lbl-tx-${i}`));
 }
 
+// Sparkline Logic
+const sparkCtxs = [];
+const sparkHistory = [[], [], [], [], [], []];
+const MAX_HISTORY = 100;
+const sparkColors = ['#00e5ff', '#ffb300', '#00d27a', '#a55eea', '#ff4785', '#00e5ff'];
+
+window.addEventListener('load', () => {
+  for (let i = 0; i < 6; i++) {
+    const canvas = document.getElementById(`spark-${i}`);
+    if (canvas) {
+      canvas.width = canvas.clientWidth * 2 || 160;
+      canvas.height = canvas.clientHeight * 2 || 60;
+      sparkCtxs.push(canvas.getContext('2d'));
+    } else {
+      sparkCtxs.push(null);
+    }
+  }
+});
+
+function drawSparklines(rxValues) {
+  for (let i = 0; i < 6; i++) {
+    if (!sparkCtxs[i]) continue;
+    
+    const val = rxValues[i];
+    sparkHistory[i].push(val !== undefined ? val : 0);
+    if (sparkHistory[i].length > MAX_HISTORY) {
+      sparkHistory[i].shift();
+    }
+    
+    const ctx = sparkCtxs[i];
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    
+    ctx.clearRect(0, 0, width, height);
+    if (sparkHistory[i].length < 2) continue;
+    
+    let min = Math.min(...sparkHistory[i]);
+    let max = Math.max(...sparkHistory[i]);
+    if (max - min < 0.1) {
+      min -= 1; max += 1;
+    }
+    const range = max - min;
+    
+    ctx.beginPath();
+    ctx.strokeStyle = sparkColors[i];
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    const step = width / (MAX_HISTORY - 1);
+    
+    for (let j = 0; j < sparkHistory[i].length; j++) {
+      const v = sparkHistory[i][j];
+      const x = j * step;
+      const y = height - ((v - min) / range) * (height - 6) - 3;
+      if (j === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+}
+
 // Establish WebSocket connection
 function connect() {
   const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -83,6 +145,12 @@ function connect() {
       // Telemetry received from LabVIEW
       else if (data.type === 'rx_data') {
         updateRxIndicators(data.values);
+        if (data.jitter !== undefined && document.getElementById('val-jitter')) {
+          document.getElementById('val-jitter').innerText = data.jitter.toFixed(1) + 'ms';
+        }
+        if (data.drops !== undefined && document.getElementById('val-drops')) {
+          document.getElementById('val-drops').innerText = data.drops;
+        }
       }
     } catch (e) {
       console.error('Error handling WebSocket message:', e);
@@ -96,6 +164,7 @@ function updateRxIndicators(values) {
       rxValElements[i].innerText = values[i].toFixed(3);
     }
   }
+  drawSparklines(values);
 }
 
 // Update control widgets to match remote configuration state

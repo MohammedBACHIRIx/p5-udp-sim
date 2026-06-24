@@ -3,6 +3,7 @@ const http = require('http');
 const WebSocket = require('ws');
 const dgram = require('dgram');
 const path = require('path');
+const { performance } = require('perf_hooks');
 
 const PORT = 3000;
 const UDP_LISTEN_PORT = 25000;  // Listen to LabVIEW on 25000
@@ -27,6 +28,9 @@ let txModulated = [false, false, false, false, false, false]; // Toggle modulati
 let rxValues = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // Received values
 
 let simTime = 0.0;
+let lastRxTime = 0;
+let rxJitter = 0.0;
+let rxDrops = 0;
 
 // Universal Configuration
 let config = {
@@ -48,13 +52,26 @@ function broadcast(data) {
 udpRx.on('message', (msg) => {
   if (msg.length === 48) {
     try {
+      const now = performance.now();
+      if (lastRxTime > 0 && config.isRunning) {
+        const delta = now - lastRxTime;
+        const currentJitter = Math.abs(delta - config.intervalMs);
+        rxJitter = rxJitter * 0.9 + currentJitter * 0.1; // EMA
+        if (delta > config.intervalMs * 1.5) {
+          rxDrops += Math.round(delta / config.intervalMs) - 1;
+        }
+      }
+      lastRxTime = now;
+
       for (let i = 0; i < 6; i++) {
         rxValues[i] = msg.readDoubleBE(i * 8);
       }
       // Broadcast received LabVIEW values to Web UI
       broadcast({
         type: 'rx_data',
-        values: rxValues
+        values: rxValues,
+        jitter: rxJitter,
+        drops: rxDrops
       });
     } catch (err) {
       console.error('Error parsing LabVIEW UDP packet:', err);

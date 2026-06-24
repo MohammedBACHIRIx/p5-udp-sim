@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
+    "puppeteer": "^25.2.0",
     "ws": "^8.16.0"
   }
 }

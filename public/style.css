@@ -208,16 +208,77 @@ h1 {
   font-weight: 600;
 }
 
+/* Channel Cards Grid layout for consolidated TX/RX */
+.channel-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  flex-grow: 1;
+}
+
+.channel-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: border-color 0.2s ease;
+}
+
+.channel-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.channel-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.2rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.channel-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ch-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.spark-container {
+  flex-grow: 1;
+  height: 35px;
+  margin: 0 1rem;
+  position: relative;
+}
+
+.spark-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .ch-value {
   font-family: monospace;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--cyan);
 }
 
-.lv-panel .ch-value {
-  color: var(--magenta);
-}
+.color-cyan { color: var(--cyan); }
+.color-yellow { color: var(--yellow); }
+.color-green { color: var(--green); }
+.color-purple { color: #a55eea; }
+.color-magenta { color: var(--magenta); }
 
 /* Controls Panel (Right Side) */
 .controls-card {
@@ -245,7 +306,7 @@ h1 {
 
 /* Run/Pause Button */
 .btn {
-  border: none;
+  border: 1px solid transparent;
   border-radius: 6px;
   padding: 0.3rem 0.8rem;
   font-family: 'Outfit', sans-serif;
@@ -257,23 +318,24 @@ h1 {
 }
 
 .btn-primary {
-  background: var(--green);
-  color: #fff;
-  box-shadow: 0 0 8px var(--green-glow);
+  background: transparent;
+  color: var(--yellow);
+  border-color: var(--yellow);
+  box-shadow: 0 0 8px var(--yellow-glow);
 }
 
 .btn-primary:hover {
-  background: #0be881;
+  background: rgba(255, 179, 0, 0.15);
 }
 
 .btn-paused {
-  background: var(--magenta);
-  color: #fff;
-  box-shadow: 0 0 8px var(--magenta-glow);
+  background: var(--green);
+  color: #141620;
+  box-shadow: 0 0 8px var(--green-glow);
 }
 
 .btn-paused:hover {
-  background: #ff5e97;
+  background: #0be881;
 }
 
 .btn:focus-visible {

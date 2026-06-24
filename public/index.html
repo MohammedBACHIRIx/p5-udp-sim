@@ -16,10 +16,6 @@
         <h1>Universal UDP Console</h1>
         <p class="subtitle">Generic Telemetry & Control Platform (6x Double BE)</p>
       </div>
-      <div class="status-indicator">
-        <span id="connection-dot" class="dot disconnected"></span>
-        <span id="connection-text" class="status-text">Disconnected</span>
-      </div>
     </header>
 
     <!-- Side-by-Side Widescreen Content Layout -->
@@ -28,65 +24,118 @@
       <!-- Left Column: Display Panels -->
       <div class="left-panel">
         
-        <!-- Outgoing telemetry values (Sent on 54400) -->
-        <div class="card data-panel">
-          <h2 class="panel-title">Telemetry Sent <span class="port-label">Port 54400</span></h2>
-          <div class="data-grid">
-            <div class="data-row">
-              <span class="ch-label">Ch 1 (Tx)</span>
-              <span id="tx-val-0" class="ch-value">0.000</span>
-            </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 2 (Tx)</span>
-              <span id="tx-val-1" class="ch-value">0.000</span>
-            </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 3 (Tx)</span>
-              <span id="tx-val-2" class="ch-value">0.000</span>
-            </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 4 (Tx)</span>
-              <span id="tx-val-3" class="ch-value">0.000</span>
-            </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 5 (Tx)</span>
-              <span id="tx-val-4" class="ch-value">0.000</span>
-            </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 6 (Tx)</span>
-              <span id="tx-val-5" class="ch-value">0.000</span>
-            </div>
+        <div class="network-status-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 0 0.5rem; margin-bottom: -0.6rem;">
+          <div class="status-indicator" style="border: none; background: transparent; padding: 0;">
+            <span id="connection-dot" class="dot disconnected"></span>
+            <span id="connection-text" class="status-text">Disconnected</span>
+          </div>
+          <div class="network-health" style="font-size: 0.75rem; color: var(--text-secondary); display: flex; gap: 1rem; font-family: monospace;">
+            <span>Drops: <strong id="val-drops" style="color: var(--text-primary);">0</strong></span>
+            <span>Jitter: <strong id="val-jitter" style="color: var(--text-primary);">0ms</strong></span>
           </div>
         </div>
 
-        <!-- Incoming telemetry values (Received on 25000) -->
-        <div class="card data-panel lv-panel">
-          <h2 class="panel-title text-magenta">Telemetry Received <span class="port-label">Port 25000</span></h2>
-          <div class="data-grid">
-            <div class="data-row">
-              <span class="ch-label">Ch 1 (Rx)</span>
-              <span id="rx-val-0" class="ch-value">0.000</span>
+        <!-- Unified Telemetry Channels -->
+        <div class="card data-panel" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <h2 class="panel-title">Channels Telemetry <span class="port-label">UDP Tx: 54400 | Rx: 25000</span></h2>
+          <div class="channel-cards-grid">
+            
+            <!-- Ch 1 -->
+            <div class="channel-card">
+              <div class="channel-header"><span class="ch-label color-cyan">Channel 1</span></div>
+              <div class="channel-body">
+                <div class="ch-stat">
+                  <span class="stat-label">TX</span>
+                  <span id="tx-val-0" class="ch-value color-cyan">0.000</span>
+                </div>
+                <div class="spark-container"><canvas id="spark-0"></canvas></div>
+                <div class="ch-stat" style="text-align: right;">
+                  <span class="stat-label">RX</span>
+                  <span id="rx-val-0" class="ch-value color-cyan">0.000</span>
+                </div>
+              </div>
             </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 2 (Rx)</span>
-              <span id="rx-val-1" class="ch-value">0.000</span>
+
+            <!-- Ch 2 -->
+            <div class="channel-card">
+              <div class="channel-header"><span class="ch-label color-yellow">Channel 2</span></div>
+              <div class="channel-body">
+                <div class="ch-stat">
+                  <span class="stat-label">TX</span>
+                  <span id="tx-val-1" class="ch-value color-yellow">0.000</span>
+                </div>
+                <div class="spark-container"><canvas id="spark-1"></canvas></div>
+                <div class="ch-stat" style="text-align: right;">
+                  <span class="stat-label">RX</span>
+                  <span id="rx-val-1" class="ch-value color-yellow">0.000</span>
+                </div>
+              </div>
             </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 3 (Rx)</span>
-              <span id="rx-val-2" class="ch-value">0.000</span>
+
+            <!-- Ch 3 -->
+            <div class="channel-card">
+              <div class="channel-header"><span class="ch-label color-green">Channel 3</span></div>
+              <div class="channel-body">
+                <div class="ch-stat">
+                  <span class="stat-label">TX</span>
+                  <span id="tx-val-2" class="ch-value color-green">0.000</span>
+                </div>
+                <div class="spark-container"><canvas id="spark-2"></canvas></div>
+                <div class="ch-stat" style="text-align: right;">
+                  <span class="stat-label">RX</span>
+                  <span id="rx-val-2" class="ch-value color-green">0.000</span>
+                </div>
+              </div>
             </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 4 (Rx)</span>
-              <span id="rx-val-3" class="ch-value">0.000</span>
+
+            <!-- Ch 4 -->
+            <div class="channel-card">
+              <div class="channel-header"><span class="ch-label color-purple">Channel 4</span></div>
+              <div class="channel-body">
+                <div class="ch-stat">
+                  <span class="stat-label">TX</span>
+                  <span id="tx-val-3" class="ch-value color-purple">0.000</span>
+                </div>
+                <div class="spark-container"><canvas id="spark-3"></canvas></div>
+                <div class="ch-stat" style="text-align: right;">
+                  <span class="stat-label">RX</span>
+                  <span id="rx-val-3" class="ch-value color-purple">0.000</span>
+                </div>
+              </div>
             </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 5 (Rx)</span>
-              <span id="rx-val-4" class="ch-value">0.000</span>
+
+            <!-- Ch 5 -->
+            <div class="channel-card">
+              <div class="channel-header"><span class="ch-label color-magenta">Channel 5</span></div>
+              <div class="channel-body">
+                <div class="ch-stat">
+                  <span class="stat-label">TX</span>
+                  <span id="tx-val-4" class="ch-value color-magenta">0.000</span>
+                </div>
+                <div class="spark-container"><canvas id="spark-4"></canvas></div>
+                <div class="ch-stat" style="text-align: right;">
+                  <span class="stat-label">RX</span>
+                  <span id="rx-val-4" class="ch-value color-magenta">0.000</span>
+                </div>
+              </div>
             </div>
-            <div class="data-row">
-              <span class="ch-label">Ch 6 (Rx)</span>
-              <span id="rx-val-5" class="ch-value">0.000</span>
+
+            <!-- Ch 6 -->
+            <div class="channel-card">
+              <div class="channel-header"><span class="ch-label color-cyan">Channel 6</span></div>
+              <div class="channel-body">
+                <div class="ch-stat">
+                  <span class="stat-label">TX</span>
+                  <span id="tx-val-5" class="ch-value color-cyan">0.000</span>
+                </div>
+                <div class="spark-container"><canvas id="spark-5"></canvas></div>
+                <div class="ch-stat" style="text-align: right;">
+                  <span class="stat-label">RX</span>
+                  <span id="rx-val-5" class="ch-value color-cyan">0.000</span>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
         
@@ -107,7 +156,7 @@
               <div class="control-label-row">
                 <label>Channel 1 Value</label>
                 <div class="control-side">
-                  <span class="control-val"><span id="lbl-tx-0">0.0</span></span>
+                  <span class="control-val color-cyan"><span id="lbl-tx-0">0.0</span></span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="mod-tx-0">
                     <span class="switch-label">Sine Mod</span>
@@ -122,7 +171,7 @@
               <div class="control-label-row">
                 <label>Channel 2 Value</label>
                 <div class="control-side">
-                  <span class="control-val"><span id="lbl-tx-1">0.0</span></span>
+                  <span class="control-val color-yellow"><span id="lbl-tx-1">0.0</span></span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="mod-tx-1">
                     <span class="switch-label">Sine Mod</span>
@@ -137,7 +186,7 @@
               <div class="control-label-row">
                 <label>Channel 3 Value</label>
                 <div class="control-side">
-                  <span class="control-val"><span id="lbl-tx-2">0.0</span></span>
+                  <span class="control-val color-green"><span id="lbl-tx-2">0.0</span></span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="mod-tx-2">
                     <span class="switch-label">Sine Mod</span>
@@ -152,7 +201,7 @@
               <div class="control-label-row">
                 <label>Channel 4 Value</label>
                 <div class="control-side">
-                  <span class="control-val"><span id="lbl-tx-3">0.0</span></span>
+                  <span class="control-val color-purple"><span id="lbl-tx-3">0.0</span></span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="mod-tx-3">
                     <span class="switch-label">Sine Mod</span>
@@ -167,7 +216,7 @@
               <div class="control-label-row">
                 <label>Channel 5 Value</label>
                 <div class="control-side">
-                  <span class="control-val"><span id="lbl-tx-4">0.0</span></span>
+                  <span class="control-val color-magenta"><span id="lbl-tx-4">0.0</span></span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="mod-tx-4">
                     <span class="switch-label">Sine Mod</span>
@@ -182,7 +231,7 @@
               <div class="control-label-row">
                 <label>Channel 6 Value</label>
                 <div class="control-side">
-                  <span class="control-val"><span id="lbl-tx-5">0.0</span></span>
+                  <span class="control-val color-cyan"><span id="lbl-tx-5">0.0</span></span>
                   <label class="toggle-switch">
                     <input type="checkbox" id="mod-tx-5">
                     <span class="switch-label">Sine Mod</span>
