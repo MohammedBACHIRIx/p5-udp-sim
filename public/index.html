@@ -20,8 +20,8 @@
   <div class="dashboard-wrapper">
     <header class="dashboard-header">
       <div class="title-section">
-        <h1>Buck Converter HIL</h1>
-        <p class="subtitle">Real-Time UDP Simulation Dashboard</p>
+        <h1>Buck Converter HIL Console</h1>
+        <p class="subtitle">Unified UDP Simulation Controller & Telemetry</p>
       </div>
       <div class="status-indicator">
         <span id="connection-dot" class="dot disconnected"></span>
@@ -29,42 +29,88 @@
       </div>
     </header>
 
-    <!-- Gauges / Numeric Indicators Grid -->
-    <section class="readouts-grid">
-      <div class="card readout-card">
-        <h3>Voltage Output</h3>
-        <div class="value-container">
-          <span id="val-v_out" class="value">0.00</span>
-          <span class="unit">V</span>
+    <!-- Gauges / Outgoing Data Grid -->
+    <section class="grid-section">
+      <h2 class="section-title">Telemetry Sent to LabVIEW (Port 54400)</h2>
+      <div class="readouts-grid">
+        <div class="card readout-card">
+          <h3>Voltage Output</h3>
+          <div class="value-container">
+            <span id="val-v_out" class="value">0.00</span>
+            <span class="unit">V</span>
+          </div>
+          <div class="trend-bar"><div id="trend-v_out" class="fill" style="width: 50%;"></div></div>
         </div>
-        <div class="trend-bar"><div id="trend-v_out" class="fill" style="width: 50%;"></div></div>
-      </div>
 
-      <div class="card readout-card">
-        <h3>Inductor Current</h3>
-        <div class="value-container">
-          <span id="val-i_l" class="value">0.00</span>
-          <span class="unit">A</span>
+        <div class="card readout-card">
+          <h3>Inductor Current</h3>
+          <div class="value-container">
+            <span id="val-i_l" class="value">0.00</span>
+            <span class="unit">A</span>
+          </div>
+          <div class="trend-bar"><div id="trend-i_l" class="fill current" style="width: 30%;"></div></div>
         </div>
-        <div class="trend-bar"><div id="trend-i_l" class="fill current" style="width: 30%;"></div></div>
-      </div>
 
-      <div class="card readout-card">
-        <h3>Reference Voltage</h3>
-        <div class="value-container">
-          <span id="val-v_ref" class="value">0.00</span>
-          <span class="unit">V</span>
+        <div class="card readout-card">
+          <h3>Reference Voltage</h3>
+          <div class="value-container">
+            <span id="val-v_ref" class="value">0.00</span>
+            <span class="unit">V</span>
+          </div>
+          <div class="trend-bar"><div id="trend-v_ref" class="fill ref" style="width: 50%;"></div></div>
         </div>
-        <div class="trend-bar"><div id="trend-v_ref" class="fill ref" style="width: 50%;"></div></div>
-      </div>
 
-      <div class="card readout-card">
-        <h3>Duty Cycle</h3>
-        <div class="value-container">
-          <span id="val-duty" class="value">0.00</span>
-          <span class="unit">%</span>
+        <div class="card readout-card">
+          <h3>Duty Cycle</h3>
+          <div class="value-container">
+            <span id="val-duty" class="value">0.00</span>
+            <span class="unit">%</span>
+          </div>
+          <div class="trend-bar"><div id="trend-duty" class="fill duty" style="width: 50%;"></div></div>
         </div>
-        <div class="trend-bar"><div id="trend-duty" class="fill duty" style="width: 50%;"></div></div>
+      </div>
+    </section>
+
+    <!-- Gauges / Incoming Data Grid -->
+    <section class="grid-section">
+      <h2 class="section-title text-magenta">Data Received from LabVIEW (Port 25000)</h2>
+      <div class="readouts-grid labview-grid">
+        <div class="card readout-card lv-card">
+          <h3>LV Val 1</h3>
+          <div class="value-container">
+            <span id="lv-val-1" class="value font-mono">0.000</span>
+          </div>
+        </div>
+        <div class="card readout-card lv-card">
+          <h3>LV Val 2</h3>
+          <div class="value-container">
+            <span id="lv-val-2" class="value font-mono">0.000</span>
+          </div>
+        </div>
+        <div class="card readout-card lv-card">
+          <h3>LV Val 3</h3>
+          <div class="value-container">
+            <span id="lv-val-3" class="value font-mono">0.000</span>
+          </div>
+        </div>
+        <div class="card readout-card lv-card">
+          <h3>LV Val 4</h3>
+          <div class="value-container">
+            <span id="lv-val-4" class="value font-mono">0.000</span>
+          </div>
+        </div>
+        <div class="card readout-card lv-card">
+          <h3>LV Val 5</h3>
+          <div class="value-container">
+            <span id="lv-val-5" class="value font-mono">0.000</span>
+          </div>
+        </div>
+        <div class="card readout-card lv-card">
+          <h3>LV Val 6</h3>
+          <div class="value-container">
+            <span id="lv-val-6" class="value font-mono">0.000</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -73,7 +119,7 @@
       <!-- Chart Card -->
       <div class="card chart-card">
         <div class="chart-header">
-          <h2>Live Telemetry Waveforms</h2>
+          <h2>Telemetry Waveform Scope</h2>
           <div class="chart-legends">
             <span class="legend v_out">V<sub>out</sub></span>
             <span class="legend i_l">I<sub>l</sub></span>
@@ -86,23 +132,34 @@
 
       <!-- Controls Card -->
       <div class="card controls-card">
-        <h2>HIL Parameter Controls</h2>
-        <p class="control-help">Interact with the sliders below to relay control commands back to the simulation (relayed to port 25000).</p>
+        <div class="controls-header">
+          <h2>Simulation Parameters</h2>
+          <button id="btn-toggle" class="btn btn-primary glow-button">PAUSE</button>
+        </div>
+        <p class="control-help">tweak the sliders to adjust simulation parameters in real-time. Changes are instantly serialized and transmitted to LabVIEW.</p>
         
         <div class="control-group">
           <div class="control-label-row">
-            <label for="slider-duty">Set Target Duty Cycle</label>
-            <span class="control-val"><span id="ctrl-duty-val">50.0</span> %</span>
+            <label for="slider-interval">Update Interval (Rate)</label>
+            <span class="control-val"><span id="ctrl-interval-val">10</span> ms</span>
           </div>
-          <input type="range" id="slider-duty" min="0" max="100" step="1" value="50" class="neon-slider">
+          <input type="range" id="slider-interval" min="2" max="1000" step="1" value="10" class="neon-slider speed">
         </div>
 
         <div class="control-group">
           <div class="control-label-row">
-            <label for="slider-v_ref">Set Reference Voltage</label>
+            <label for="slider-v_ref">Voltage Reference Offset</label>
             <span class="control-val"><span id="ctrl-v_ref-val">12.0</span> V</span>
           </div>
           <input type="range" id="slider-v_ref" min="0" max="24" step="0.5" value="12" class="neon-slider v_ref">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label-row">
+            <label for="slider-duty">Duty Cycle Base Offset</label>
+            <span class="control-val"><span id="ctrl-duty-val">50.0</span> %</span>
+          </div>
+          <input type="range" id="slider-duty" min="0" max="100" step="1" value="50" class="neon-slider">
         </div>
 
         <div class="control-group">
@@ -113,14 +170,22 @@
           <input type="range" id="slider-load" min="1" max="100" step="1" value="10" class="neon-slider load">
         </div>
 
+        <div class="control-group">
+          <div class="control-label-row">
+            <label for="slider-noise">Random Noise Scale</label>
+            <span class="control-val"><span id="ctrl-noise-val">0.10</span></span>
+          </div>
+          <input type="range" id="slider-noise" min="0" max="2" step="0.05" value="0.1" class="neon-slider noise">
+        </div>
+
         <div class="status-box">
           <div class="status-row">
-            <span>System Noise (P5):</span>
-            <strong id="val-noise">0.00</strong>
+            <span>Current Time Index:</span>
+            <strong id="val-time">0.000 s</strong>
           </div>
           <div class="status-row">
-            <span>Sim Time Index:</span>
-            <strong id="val-time">0.000 s</strong>
+            <span>Noise Output:</span>
+            <strong id="val-noise">0.000</strong>
           </div>
         </div>
       </div>

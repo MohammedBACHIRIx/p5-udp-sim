@@ -48,7 +48,7 @@ body {
   position: absolute;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.25;
+  opacity: 0.20;
   animation: floatGlow 20s infinite ease-in-out alternate;
 }
 
@@ -78,7 +78,7 @@ body {
 .dashboard-wrapper {
   max-width: 1300px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -90,7 +90,7 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--panel-border);
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.2rem;
 }
 
 h1 {
@@ -146,6 +146,27 @@ h1 {
   100% { transform: scale(0.95); opacity: 0.6; }
 }
 
+/* Grid Sections */
+.grid-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.section-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.section-title.text-magenta {
+  color: var(--magenta);
+  text-shadow: 0 0 10px var(--magenta-glow);
+}
+
 /* Glassmorphism Panel Card Base */
 .card {
   background: var(--panel-bg);
@@ -154,7 +175,7 @@ h1 {
   padding: 1.5rem;
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -164,13 +185,13 @@ h1 {
 /* Readouts Grid */
 .readouts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
 }
 
 .readout-card h3 {
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
@@ -178,14 +199,19 @@ h1 {
 .value-container {
   display: flex;
   align-items: baseline;
-  margin: 0.8rem 0;
+  margin: 0.8rem 0 0.4rem 0;
 }
 
 .value {
   font-family: 'Outfit', sans-serif;
-  font-size: 2.3rem;
+  font-size: 2.1rem;
   font-weight: 700;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+.font-mono {
+  font-family: monospace !important;
+  font-size: 1.8rem;
 }
 
 .unit {
@@ -198,7 +224,7 @@ h1 {
 /* Fillbars inside Cards */
 .trend-bar {
   width: 100%;
-  height: 6px;
+  height: 5px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
   overflow: hidden;
@@ -216,10 +242,25 @@ h1 {
 .trend-bar .fill.ref { background: var(--yellow); box-shadow: 0 0 10px var(--yellow-glow); }
 .trend-bar .fill.duty { background: var(--green); box-shadow: 0 0 10px var(--green-glow); }
 
+/* LabVIEW Specific Readouts */
+.labview-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.lv-card {
+  padding: 1.1rem 1.3rem;
+  border-color: rgba(243, 85, 136, 0.15);
+}
+
+.lv-card:hover {
+  border-color: rgba(243, 85, 136, 0.4);
+  box-shadow: 0 0 15px rgba(243, 85, 136, 0.15);
+}
+
 /* Main Telemetry & Control Layout */
 .main-content-layout {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1.8fr 1.2fr;
   gap: 1.5rem;
 }
 
@@ -274,7 +315,7 @@ h1 {
 .chart-container {
   position: relative;
   flex-grow: 1;
-  min-height: 350px;
+  min-height: 380px;
 }
 
 /* Controls Panel */
@@ -284,9 +325,52 @@ h1 {
   gap: 1.2rem;
 }
 
+.controls-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .controls-card h2 {
   font-family: 'Outfit', sans-serif;
   font-size: 1.3rem;
+}
+
+/* Run/Pause Button */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.45rem 1.2rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 0 10px var(--green-glow);
+}
+
+.btn-primary:hover {
+  background: #0be881;
+  box-shadow: 0 0 20px var(--green-glow);
+  transform: translateY(-1px);
+}
+
+.btn-paused {
+  background: var(--magenta);
+  color: #fff;
+  box-shadow: 0 0 10px var(--magenta-glow);
+}
+
+.btn-paused:hover {
+  background: #ff5e97;
+  box-shadow: 0 0 20px var(--magenta-glow);
+  transform: translateY(-1px);
 }
 
 .control-help {
@@ -315,7 +399,7 @@ h1 {
 .neon-slider {
   -webkit-appearance: none;
   width: 100%;
-  height: 8px;
+  height: 6px;
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.08);
   outline: none;
@@ -326,8 +410,8 @@ h1 {
 .neon-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--cyan);
   box-shadow: 0 0 10px var(--cyan-glow);
@@ -336,7 +420,7 @@ h1 {
 }
 
 .neon-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.25);
 }
 
 .neon-slider.v_ref::-webkit-slider-thumb {
@@ -349,9 +433,19 @@ h1 {
   box-shadow: 0 0 10px var(--green-glow);
 }
 
+.neon-slider.speed::-webkit-slider-thumb {
+  background: #a55eea;
+  box-shadow: 0 0 10px rgba(165, 94, 234, 0.4);
+}
+
+.neon-slider.noise::-webkit-slider-thumb {
+  background: var(--magenta);
+  box-shadow: 0 0 10px var(--magenta-glow);
+}
+
 /* Status Box */
 .status-box {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 1rem;
