@@ -76,14 +76,14 @@ body {
 
 /* Dashboard Wrapper */
 .dashboard-wrapper {
-  max-width: 1300px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1.2rem;
   display: flex;
   flex-direction: column;
   height: 100vh;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 /* Header Section */
@@ -92,12 +92,12 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--panel-border);
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.4rem;
 }
 
 h1 {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 800;
   letter-spacing: -0.5px;
   background: linear-gradient(90deg, #fff, var(--cyan));
@@ -107,7 +107,7 @@ h1 {
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   margin-top: 0.1rem;
 }
 
@@ -117,10 +117,10 @@ h1 {
   align-items: center;
   gap: 0.5rem;
   background: rgba(255, 255, 255, 0.04);
-  padding: 0.4rem 0.8rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 20px;
   border: 1px solid var(--panel-border);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -148,16 +148,51 @@ h1 {
   100% { transform: scale(0.95); opacity: 0.6; }
 }
 
+/* Widescreen Content Layout Split */
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1.2rem;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+@media (max-width: 950px) {
+  .dashboard-content {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  body {
+    height: auto;
+    overflow-y: auto;
+  }
+}
+
+/* Side Panels */
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  justify-content: space-between;
+  min-height: 0;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 /* Grid Sections */
 .grid-section {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .section-title {
   font-family: 'Outfit', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: var(--cyan);
@@ -174,7 +209,7 @@ h1 {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
-  padding: 0.8rem 1.2rem;
+  padding: 0.6rem 1rem;
   backdrop-filter: blur(12px);
   box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.3);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -184,22 +219,16 @@ h1 {
   border-color: rgba(0, 242, 254, 0.2);
 }
 
-/* Readouts Grid */
+/* Readouts Grid - 3 Columns for Side-by-Side View */
 .readouts-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 0.75rem;
-}
-
-@media (max-width: 1000px) {
-  .readouts-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
 }
 
 .readout-card h3 {
   color: var(--text-secondary);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -207,30 +236,22 @@ h1 {
 .value-container {
   display: flex;
   align-items: baseline;
-  margin: 0.3rem 0;
+  margin: 0.2rem 0;
 }
 
 .value {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 700;
 }
 
 .font-mono {
   font-family: monospace !important;
-  font-size: 1.45rem;
-}
-
-.unit {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-left: 0.2rem;
-  font-weight: 600;
+  font-size: 1.35rem;
 }
 
 /* LabVIEW Specific Readouts */
 .lv-card {
-  padding: 0.8rem 1.2rem;
   border-color: rgba(243, 85, 136, 0.15);
 }
 
@@ -239,21 +260,13 @@ h1 {
   box-shadow: 0 0 10px rgba(243, 85, 136, 0.1);
 }
 
-/* Main Layout */
-.main-content-layout {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  flex-grow: 1;
-  min-height: 0; /* Allows container to shrink to avoid overflow */
-}
-
+/* Controls Panel (Right Side) */
 .controls-card {
   width: 100%;
-  max-width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.6rem;
 }
 
 .controls-header {
@@ -264,17 +277,17 @@ h1 {
 
 .controls-card h2 {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 /* Run/Pause Button */
 .btn {
   border: none;
   border-radius: 6px;
-  padding: 0.35rem 1rem;
+  padding: 0.3rem 0.8rem;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
   outline: none;
@@ -304,15 +317,15 @@ h1 {
 
 .control-help {
   color: var(--text-secondary);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   line-height: 1.3;
 }
 
-/* Custom 2-Column Grid Layout for Sliders */
+/* Vertical Stacking of Sliders on the Right Column */
 .sliders-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   width: 100%;
   flex-grow: 1;
 }
@@ -320,15 +333,14 @@ h1 {
 .control-row-item {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  justify-content: center;
+  gap: 0.15rem;
 }
 
 .control-label-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
-  margin-bottom: 0.2rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.1rem;
   font-weight: 600;
   align-items: center;
 }
@@ -336,7 +348,7 @@ h1 {
 .control-side {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.6rem;
 }
 
 .control-val {
@@ -347,12 +359,12 @@ h1 {
 .toggle-switch {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.7rem;
+  gap: 0.25rem;
+  font-size: 0.65rem;
   color: var(--text-secondary);
   cursor: pointer;
   background: rgba(255, 255, 255, 0.04);
-  padding: 0.15rem 0.4rem;
+  padding: 0.1rem 0.3rem;
   border-radius: 4px;
   border: 1px solid var(--panel-border);
   transition: all 0.3s ease;
@@ -370,9 +382,8 @@ h1 {
 
 /* Speed Slider at Bottom */
 .separator-top {
-  grid-column: span 2;
   border-top: 1px solid var(--panel-border);
-  padding-top: 0.6rem;
+  padding-top: 0.4rem;
   margin-top: 0.2rem;
 }
 
@@ -380,7 +391,7 @@ h1 {
 .neon-slider {
   -webkit-appearance: none;
   width: 100%;
-  height: 5px;
+  height: 4px;
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.08);
   outline: none;
@@ -391,8 +402,8 @@ h1 {
 .neon-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--cyan);
   box-shadow: 0 0 8px var(--cyan-glow);
@@ -429,12 +440,12 @@ h1 {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--panel-border);
   border-radius: 10px;
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 0.8rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   margin-top: auto;
 }
 
@@ -449,5 +460,5 @@ h1 {
 
 .status-row strong {
   font-family: monospace;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }

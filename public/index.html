@@ -27,211 +27,220 @@
       </div>
     </header>
 
-    <!-- Outgoing telemetry values (Sent on 54400) -->
-    <section class="grid-section">
-      <h2 class="section-title">Telemetry Sent (Port 54400)</h2>
-      <div class="readouts-grid">
-        <div class="card readout-card">
-          <h3>Channel 1 (Tx)</h3>
-          <div class="value-container">
-            <span id="tx-val-0" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card">
-          <h3>Channel 2 (Tx)</h3>
-          <div class="value-container">
-            <span id="tx-val-1" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card">
-          <h3>Channel 3 (Tx)</h3>
-          <div class="value-container">
-            <span id="tx-val-2" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card">
-          <h3>Channel 4 (Tx)</h3>
-          <div class="value-container">
-            <span id="tx-val-3" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card">
-          <h3>Channel 5 (Tx)</h3>
-          <div class="value-container">
-            <span id="tx-val-4" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card">
-          <h3>Channel 6 (Tx)</h3>
-          <div class="value-container">
-            <span id="tx-val-5" class="value font-mono">0.000</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Incoming telemetry values (Received on 25000) -->
-    <section class="grid-section">
-      <h2 class="section-title text-magenta">Telemetry Received (Port 25000)</h2>
-      <div class="readouts-grid labview-grid">
-        <div class="card readout-card lv-card">
-          <h3>Channel 1 (Rx)</h3>
-          <div class="value-container">
-            <span id="rx-val-0" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card lv-card">
-          <h3>Channel 2 (Rx)</h3>
-          <div class="value-container">
-            <span id="rx-val-1" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card lv-card">
-          <h3>Channel 3 (Rx)</h3>
-          <div class="value-container">
-            <span id="rx-val-2" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card lv-card">
-          <h3>Channel 4 (Rx)</h3>
-          <div class="value-container">
-            <span id="rx-val-3" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card lv-card">
-          <h3>Channel 5 (Rx)</h3>
-          <div class="value-container">
-            <span id="rx-val-4" class="value font-mono">0.000</span>
-          </div>
-        </div>
-        <div class="card readout-card lv-card">
-          <h3>Channel 6 (Rx)</h3>
-          <div class="value-container">
-            <span id="rx-val-5" class="value font-mono">0.000</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Main controls -->
-    <main class="main-content-layout">
-      <div class="card controls-card">
-        <div class="controls-header">
-          <h2>Channel Base Control & Modulation</h2>
-          <button id="btn-toggle" class="btn btn-primary glow-button">PAUSE</button>
-        </div>
-        <p class="control-help">Adjust the baseline value of each of the 6 output channels. Toggle the modulation checkbox to add dynamic sine wave oscillation to that channel.</p>
+    <!-- Side-by-Side Widescreen Content Layout -->
+    <div class="dashboard-content">
+      
+      <!-- Left Column: Display Panels -->
+      <div class="left-panel">
         
-        <!-- Controls Grid -->
-        <div class="sliders-list">
-          <!-- Ch 1 -->
-          <div class="control-row-item">
-            <div class="control-label-row">
-              <label>Channel 1 Value</label>
-              <div class="control-side">
-                <span class="control-val"><span id="lbl-tx-0">0.0</span></span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="mod-tx-0">
-                  <span class="switch-label">Sine Mod</span>
-                </label>
+        <!-- Outgoing telemetry values (Sent on 54400) -->
+        <section class="grid-section">
+          <h2 class="section-title">Telemetry Sent (Port 54400)</h2>
+          <div class="readouts-grid">
+            <div class="card readout-card">
+              <h3>Channel 1 (Tx)</h3>
+              <div class="value-container">
+                <span id="tx-val-0" class="value font-mono">0.000</span>
               </div>
             </div>
-            <input type="range" id="slide-tx-0" min="-100" max="100" step="1" value="10" class="neon-slider">
-          </div>
-
-          <!-- Ch 2 -->
-          <div class="control-row-item">
-            <div class="control-label-row">
-              <label>Channel 2 Value</label>
-              <div class="control-side">
-                <span class="control-val"><span id="lbl-tx-1">0.0</span></span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="mod-tx-1">
-                  <span class="switch-label">Sine Mod</span>
-                </label>
+            <div class="card readout-card">
+              <h3>Channel 2 (Tx)</h3>
+              <div class="value-container">
+                <span id="tx-val-1" class="value font-mono">0.000</span>
               </div>
             </div>
-            <input type="range" id="slide-tx-1" min="-100" max="100" step="1" value="20" class="neon-slider v_ref">
-          </div>
-
-          <!-- Ch 3 -->
-          <div class="control-row-item">
-            <div class="control-label-row">
-              <label>Channel 3 Value</label>
-              <div class="control-side">
-                <span class="control-val"><span id="lbl-tx-2">0.0</span></span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="mod-tx-2">
-                  <span class="switch-label">Sine Mod</span>
-                </label>
+            <div class="card readout-card">
+              <h3>Channel 3 (Tx)</h3>
+              <div class="value-container">
+                <span id="tx-val-2" class="value font-mono">0.000</span>
               </div>
             </div>
-            <input type="range" id="slide-tx-2" min="-100" max="100" step="1" value="30" class="neon-slider load">
-          </div>
-
-          <!-- Ch 4 -->
-          <div class="control-row-item">
-            <div class="control-label-row">
-              <label>Channel 4 Value</label>
-              <div class="control-side">
-                <span class="control-val"><span id="lbl-tx-3">0.0</span></span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="mod-tx-3">
-                  <span class="switch-label">Sine Mod</span>
-                </label>
+            <div class="card readout-card">
+              <h3>Channel 4 (Tx)</h3>
+              <div class="value-container">
+                <span id="tx-val-3" class="value font-mono">0.000</span>
               </div>
             </div>
-            <input type="range" id="slide-tx-3" min="-100" max="100" step="1" value="40" class="neon-slider speed">
-          </div>
-
-          <!-- Ch 5 -->
-          <div class="control-row-item">
-            <div class="control-label-row">
-              <label>Channel 5 Value</label>
-              <div class="control-side">
-                <span class="control-val"><span id="lbl-tx-4">0.0</span></span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="mod-tx-4">
-                  <span class="switch-label">Sine Mod</span>
-                </label>
+            <div class="card readout-card">
+              <h3>Channel 5 (Tx)</h3>
+              <div class="value-container">
+                <span id="tx-val-4" class="value font-mono">0.000</span>
               </div>
             </div>
-            <input type="range" id="slide-tx-4" min="-100" max="100" step="1" value="50" class="neon-slider noise">
-          </div>
-
-          <!-- Ch 6 -->
-          <div class="control-row-item">
-            <div class="control-label-row">
-              <label>Channel 6 Value</label>
-              <div class="control-side">
-                <span class="control-val"><span id="lbl-tx-5">0.0</span></span>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="mod-tx-5">
-                  <span class="switch-label">Sine Mod</span>
-                </label>
+            <div class="card readout-card">
+              <h3>Channel 6 (Tx)</h3>
+              <div class="value-container">
+                <span id="tx-val-5" class="value font-mono">0.000</span>
               </div>
             </div>
-            <input type="range" id="slide-tx-5" min="-100" max="100" step="1" value="0" class="neon-slider">
           </div>
+        </section>
 
-          <!-- General Speed Config -->
-          <div class="control-row-item separator-top">
-            <div class="control-label-row">
-              <label for="slider-interval">Update Interval (Speed)</label>
-              <span class="control-val"><span id="ctrl-interval-val">10</span> ms</span>
+        <!-- Incoming telemetry values (Received on 25000) -->
+        <section class="grid-section">
+          <h2 class="section-title text-magenta">Telemetry Received (Port 25000)</h2>
+          <div class="readouts-grid labview-grid">
+            <div class="card readout-card lv-card">
+              <h3>Channel 1 (Rx)</h3>
+              <div class="value-container">
+                <span id="rx-val-0" class="value font-mono">0.000</span>
+              </div>
             </div>
-            <input type="range" id="slider-interval" min="2" max="1000" step="1" value="10" class="neon-slider speed">
+            <div class="card readout-card lv-card">
+              <h3>Channel 2 (Rx)</h3>
+              <div class="value-container">
+                <span id="rx-val-1" class="value font-mono">0.000</span>
+              </div>
+            </div>
+            <div class="card readout-card lv-card">
+              <h3>Channel 3 (Rx)</h3>
+              <div class="value-container">
+                <span id="rx-val-2" class="value font-mono">0.000</span>
+              </div>
+            </div>
+            <div class="card readout-card lv-card">
+              <h3>Channel 4 (Rx)</h3>
+              <div class="value-container">
+                <span id="rx-val-3" class="value font-mono">0.000</span>
+              </div>
+            </div>
+            <div class="card readout-card lv-card">
+              <h3>Channel 5 (Rx)</h3>
+              <div class="value-container">
+                <span id="rx-val-4" class="value font-mono">0.000</span>
+              </div>
+            </div>
+            <div class="card readout-card lv-card">
+              <h3>Channel 6 (Rx)</h3>
+              <div class="value-container">
+                <span id="rx-val-5" class="value font-mono">0.000</span>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
+        
+      </div>
 
-        <div class="status-box">
-          <div class="status-row">
-            <span>Simulation Time Running:</span>
-            <strong id="val-time">0.000 s</strong>
+      <!-- Right Column: Control Panel -->
+      <div class="right-panel">
+        <div class="card controls-card">
+          <div class="controls-header">
+            <h2>Base Control & Modulation</h2>
+            <button id="btn-toggle" class="btn btn-primary glow-button">PAUSE</button>
+          </div>
+          <p class="control-help">Adjust output channels baseline. Check "Sine Mod" to add sine wave sweeps.</p>
+          
+          <div class="sliders-list">
+            <!-- Ch 1 -->
+            <div class="control-row-item">
+              <div class="control-label-row">
+                <label>Channel 1 Value</label>
+                <div class="control-side">
+                  <span class="control-val"><span id="lbl-tx-0">0.0</span></span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="mod-tx-0">
+                    <span class="switch-label">Sine Mod</span>
+                  </label>
+                </div>
+              </div>
+              <input type="range" id="slide-tx-0" min="-100" max="100" step="1" value="10" class="neon-slider">
+            </div>
+
+            <!-- Ch 2 -->
+            <div class="control-row-item">
+              <div class="control-label-row">
+                <label>Channel 2 Value</label>
+                <div class="control-side">
+                  <span class="control-val"><span id="lbl-tx-1">0.0</span></span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="mod-tx-1">
+                    <span class="switch-label">Sine Mod</span>
+                  </label>
+                </div>
+              </div>
+              <input type="range" id="slide-tx-1" min="-100" max="100" step="1" value="20" class="neon-slider v_ref">
+            </div>
+
+            <!-- Ch 3 -->
+            <div class="control-row-item">
+              <div class="control-label-row">
+                <label>Channel 3 Value</label>
+                <div class="control-side">
+                  <span class="control-val"><span id="lbl-tx-2">0.0</span></span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="mod-tx-2">
+                    <span class="switch-label">Sine Mod</span>
+                  </label>
+                </div>
+              </div>
+              <input type="range" id="slide-tx-2" min="-100" max="100" step="1" value="30" class="neon-slider load">
+            </div>
+
+            <!-- Ch 4 -->
+            <div class="control-row-item">
+              <div class="control-label-row">
+                <label>Channel 4 Value</label>
+                <div class="control-side">
+                  <span class="control-val"><span id="lbl-tx-3">0.0</span></span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="mod-tx-3">
+                    <span class="switch-label">Sine Mod</span>
+                  </label>
+                </div>
+              </div>
+              <input type="range" id="slide-tx-3" min="-100" max="100" step="1" value="40" class="neon-slider speed">
+            </div>
+
+            <!-- Ch 5 -->
+            <div class="control-row-item">
+              <div class="control-label-row">
+                <label>Channel 5 Value</label>
+                <div class="control-side">
+                  <span class="control-val"><span id="lbl-tx-4">0.0</span></span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="mod-tx-4">
+                    <span class="switch-label">Sine Mod</span>
+                  </label>
+                </div>
+              </div>
+              <input type="range" id="slide-tx-4" min="-100" max="100" step="1" value="50" class="neon-slider noise">
+            </div>
+
+            <!-- Ch 6 -->
+            <div class="control-row-item">
+              <div class="control-label-row">
+                <label>Channel 6 Value</label>
+                <div class="control-side">
+                  <span class="control-val"><span id="lbl-tx-5">0.0</span></span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="mod-tx-5">
+                    <span class="switch-label">Sine Mod</span>
+                  </label>
+                </div>
+              </div>
+              <input type="range" id="slide-tx-5" min="-100" max="100" step="1" value="0" class="neon-slider">
+            </div>
+
+            <!-- General Speed Config -->
+            <div class="control-row-item separator-top">
+              <div class="control-label-row">
+                <label for="slider-interval">Update Interval (Speed)</label>
+                <span class="control-val"><span id="ctrl-interval-val">10</span> ms</span>
+              </div>
+              <input type="range" id="slider-interval" min="2" max="1000" step="1" value="10" class="neon-slider speed">
+            </div>
+          </div>
+
+          <div class="status-box">
+            <div class="status-row">
+              <span>Sim Time Running:</span>
+              <strong id="val-time">0.000 s</strong>
+            </div>
           </div>
         </div>
       </div>
-    </main>
+      
+    </div>
   </div>
 
   <script src="index.js"></script>
