@@ -10,7 +10,7 @@ SEND_HOST = "127.0.0.1"
 SEND_PORT = 54400
 LISTEN_HOST = "0.0.0.0"  # Listen on all local interfaces
 LISTEN_PORT = 25000
-INTERVAL_SEC = 0.01      # 10 ms (100 Hz frequency)
+INTERVAL_SEC = 0.0001    # 0.1 ms (10 kHz frequency)
 
 # Endianness: '>' is Big-Endian, '<' is Little-Endian
 BYTE_ORDER = '>'
