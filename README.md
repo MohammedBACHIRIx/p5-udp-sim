@@ -1,8 +1,8 @@
-# Universal UDP HIL Console
+# Universal UDP Console
 
-A high-performance, unified Node.js real-time simulation dashboard designed to simulate, monitor, and control HIL (Hardware-In-the-Loop) signals for any LabVIEW UI utilizing a 6-channel double-precision UDP structure.
+A high-performance, unified Node.js real-time simulation dashboard designed to simulate, monitor, and control signals for any LabVIEW UI utilizing a 6-channel double-precision UDP structure.
 
-![Universal HIL UDP Console](screenshot.jpg)
+![Universal UDP Console](screenshot.jpg)
 
 ## Features
 * **No Python Prerequisite**: The simulation loop runs directly within the Node.js backend.
