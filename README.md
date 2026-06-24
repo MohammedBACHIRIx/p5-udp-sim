@@ -1,14 +1,19 @@
-# UDP Emulator & Web Console for LabVIEW HIL UI Testing
+# Universal UDP HIL Console
 
-A high-performance, unified Node.js real-time simulation dashboard designed to simulate and control HIL (Hardware-In-the-Loop) signals for a Buck Converter LabVIEW UI.
+A high-performance, unified Node.js real-time simulation dashboard designed to simulate, monitor, and control HIL (Hardware-In-the-Loop) signals for any LabVIEW UI utilizing a 6-channel double-precision UDP structure.
+
+![Universal HIL UDP Console](screenshot.jpg)
 
 ## Features
-* **No Python Prerequisite**: The HIL simulation math and UDP socket loop run directly within the Node.js backend.
-* **Unified Web Console**:
-  * **Interactive Parameters**: Tweak sliders (e.g., target voltage reference, duty cycle, noise, simulated load) and toggle execution state (Run/Pause) in real-time.
-  * **Transmit Telemetry**: Sends 6 simulated variables to LabVIEW on port `54400` as double-precision values.
-  * **Receive Telemetry**: Listens to LabVIEW on port `25000` and displays the incoming command values in real-time in the browser.
-* **Byte Order / Endianness**: Serialized as **Big-Endian** (`>`) format to match LabVIEW's default network configuration.
+* **No Python Prerequisite**: The simulation loop runs directly within the Node.js backend.
+* **Universal 6-Channel Layout**:
+  * **Generic Tx Channels (1-6)**: Send data to LabVIEW on port `54400` as double-precision values.
+  * **Generic Rx Channels (1-6)**: Receive feedback/commands from LabVIEW on port `25000` and displays them live in the web browser.
+* **Granular Output Modification**:
+  * **6 Output Sliders**: Adjust baseline values for outgoing channels from `-100` to `+100`.
+  * **6 Sine Mod Toggles**: Enable a 1 Hz sine wave sweep on individual channels for dynamic telemetry sweeps.
+* **Adjustable Sample Time**: Set the transmission interval from `2 ms` to `1000 ms` directly from the web page.
+* **Byte Order / Endianness**: Configured for **Big-Endian** (`>`) format to match LabVIEW's default network configuration.
 
 ---
 
@@ -16,8 +21,8 @@ A high-performance, unified Node.js real-time simulation dashboard designed to s
 
 | Direction | Port | Data Type | Bytes | Description |
 |---|---|---|---|---|
-| **Send** (To LabVIEW) | `54400` | 6 × 64-bit Doubles (Big Endian) | 48 bytes | Outputs simulated Buck Converter state variables (`Vout`, `iL`, `Ref`, `Duty`, `Noise`, `Timestamp`) |
-| **Receive** (From LabVIEW) | `25000` | 6 × 64-bit Doubles (Big Endian) | 48 bytes | Listens for commands or feedback from the LabVIEW UI |
+| **Send** (To LabVIEW) | `54400` | 6 × 64-bit Doubles (Big Endian) | 48 bytes | Outputs simulated state variables (`Tx 1` to `Tx 6`) |
+| **Receive** (From LabVIEW) | `25000` | 6 × 64-bit Doubles (Big Endian) | 48 bytes | Listens for commands or feedback (`Rx 1` to `Rx 6`) |
 
 ---
 
