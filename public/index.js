@@ -1,11 +1,5 @@
 // State variables
 let ws = null;
-const maxDataPoints = 80;
-const chartData = {
-  labels: [],
-  vOut: [],
-  iL: []
-};
 
 // Simulation Configuration State
 let config = {
@@ -55,53 +49,6 @@ const lblDuty = document.getElementById('ctrl-duty-val');
 const lblLoad = document.getElementById('ctrl-load-val');
 const lblNoise = document.getElementById('ctrl-noise-val');
 
-// Initialize Chart.js
-const ctx = document.getElementById('telemetryChart').getContext('2d');
-const chart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: chartData.labels,
-    datasets: [
-      {
-        label: 'Vout (V)',
-        data: chartData.vOut,
-        borderColor: '#00f2fe',
-        backgroundColor: 'rgba(0, 242, 254, 0.05)',
-        borderWidth: 2.5,
-        pointRadius: 0,
-        tension: 0.3,
-        fill: true
-      },
-      {
-        label: 'IL (A)',
-        data: chartData.iL,
-        borderColor: '#f35588',
-        backgroundColor: 'rgba(243, 85, 136, 0.05)',
-        borderWidth: 2.5,
-        pointRadius: 0,
-        tension: 0.3,
-        fill: true
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false }
-    },
-    scales: {
-      x: {
-        grid: { color: 'rgba(255, 255, 255, 0.03)' },
-        ticks: { color: '#9ca3af', font: { size: 10 } }
-      },
-      y: {
-        grid: { color: 'rgba(255, 255, 255, 0.03)' },
-        ticks: { color: '#9ca3af' }
-      }
-    }
-  }
-});
 
 // Establish WebSocket Connection
 function connect() {
@@ -123,8 +70,6 @@ function connect() {
     setTimeout(connect, 2000);
   };
 
-  let lastChartUpdateTime = 0;
-  
   ws.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data);
@@ -152,26 +97,6 @@ function connect() {
         trendIL.style.width = `${Math.min(100, (iL / 10) * 100)}%`;
         trendVRef.style.width = `${Math.min(100, (vRef / 24) * 100)}%`;
         trendDuty.style.width = `${Math.min(100, duty * 100)}%`;
-
-        // Throttle chart rendering to 40 FPS (25ms) to preserve CPU performance
-        const now = Date.now();
-        if (now - lastChartUpdateTime > 25) {
-          lastChartUpdateTime = now;
-
-          // Push data
-          chartData.labels.push(simTime.toFixed(2));
-          chartData.vOut.push(vOut);
-          chartData.iL.push(iL);
-
-          // Keep sliding window size
-          if (chartData.labels.length > maxDataPoints) {
-            chartData.labels.shift();
-            chartData.vOut.shift();
-            chartData.iL.shift();
-          }
-
-          chart.update('none'); // Update without full transition animation for high speed
-        }
       }
 
       // Incoming data packets parsed from LabVIEW

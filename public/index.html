@@ -6,8 +6,6 @@
   <title>Buck Converter HIL Dashboard</title>
   <!-- Google Fonts: Inter & Outfit -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -114,22 +112,8 @@
       </div>
     </section>
 
-    <!-- Main Content: Charts & Controls -->
+    <!-- Main Content: Controls -->
     <main class="main-content-layout">
-      <!-- Chart Card -->
-      <div class="card chart-card">
-        <div class="chart-header">
-          <h2>Telemetry Waveform Scope</h2>
-          <div class="chart-legends">
-            <span class="legend v_out">V<sub>out</sub></span>
-            <span class="legend i_l">I<sub>l</sub></span>
-          </div>
-        </div>
-        <div class="chart-container">
-          <canvas id="telemetryChart"></canvas>
-        </div>
-      </div>
-
       <!-- Controls Card -->
       <div class="card controls-card">
         <div class="controls-header">

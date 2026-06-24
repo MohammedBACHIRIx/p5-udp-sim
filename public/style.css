@@ -259,9 +259,14 @@ h1 {
 
 /* Main Telemetry & Control Layout */
 .main-content-layout {
-  display: grid;
-  grid-template-columns: 1.8fr 1.2fr;
-  gap: 1.5rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.controls-card {
+  width: 100%;
+  max-width: 650px;
 }
 
 @media (max-width: 900px) {
