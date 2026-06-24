@@ -29,90 +29,66 @@
       <div class="left-panel">
         
         <!-- Outgoing telemetry values (Sent on 54400) -->
-        <section class="grid-section">
-          <h2 class="section-title">Telemetry Sent (Port 54400)</h2>
-          <div class="readouts-grid">
-            <div class="card readout-card">
-              <h3>Channel 1 (Tx)</h3>
-              <div class="value-container">
-                <span id="tx-val-0" class="value font-mono">0.000</span>
-              </div>
+        <div class="card data-panel">
+          <h2 class="panel-title">Telemetry Sent <span class="port-label">Port 54400</span></h2>
+          <div class="data-grid">
+            <div class="data-row">
+              <span class="ch-label">Ch 1 (Tx)</span>
+              <span id="tx-val-0" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card">
-              <h3>Channel 2 (Tx)</h3>
-              <div class="value-container">
-                <span id="tx-val-1" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 2 (Tx)</span>
+              <span id="tx-val-1" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card">
-              <h3>Channel 3 (Tx)</h3>
-              <div class="value-container">
-                <span id="tx-val-2" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 3 (Tx)</span>
+              <span id="tx-val-2" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card">
-              <h3>Channel 4 (Tx)</h3>
-              <div class="value-container">
-                <span id="tx-val-3" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 4 (Tx)</span>
+              <span id="tx-val-3" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card">
-              <h3>Channel 5 (Tx)</h3>
-              <div class="value-container">
-                <span id="tx-val-4" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 5 (Tx)</span>
+              <span id="tx-val-4" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card">
-              <h3>Channel 6 (Tx)</h3>
-              <div class="value-container">
-                <span id="tx-val-5" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 6 (Tx)</span>
+              <span id="tx-val-5" class="ch-value">0.000</span>
             </div>
           </div>
-        </section>
+        </div>
 
         <!-- Incoming telemetry values (Received on 25000) -->
-        <section class="grid-section">
-          <h2 class="section-title text-magenta">Telemetry Received (Port 25000)</h2>
-          <div class="readouts-grid labview-grid">
-            <div class="card readout-card lv-card">
-              <h3>Channel 1 (Rx)</h3>
-              <div class="value-container">
-                <span id="rx-val-0" class="value font-mono">0.000</span>
-              </div>
+        <div class="card data-panel lv-panel">
+          <h2 class="panel-title text-magenta">Telemetry Received <span class="port-label">Port 25000</span></h2>
+          <div class="data-grid">
+            <div class="data-row">
+              <span class="ch-label">Ch 1 (Rx)</span>
+              <span id="rx-val-0" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card lv-card">
-              <h3>Channel 2 (Rx)</h3>
-              <div class="value-container">
-                <span id="rx-val-1" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 2 (Rx)</span>
+              <span id="rx-val-1" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card lv-card">
-              <h3>Channel 3 (Rx)</h3>
-              <div class="value-container">
-                <span id="rx-val-2" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 3 (Rx)</span>
+              <span id="rx-val-2" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card lv-card">
-              <h3>Channel 4 (Rx)</h3>
-              <div class="value-container">
-                <span id="rx-val-3" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 4 (Rx)</span>
+              <span id="rx-val-3" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card lv-card">
-              <h3>Channel 5 (Rx)</h3>
-              <div class="value-container">
-                <span id="rx-val-4" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 5 (Rx)</span>
+              <span id="rx-val-4" class="ch-value">0.000</span>
             </div>
-            <div class="card readout-card lv-card">
-              <h3>Channel 6 (Rx)</h3>
-              <div class="value-container">
-                <span id="rx-val-5" class="value font-mono">0.000</span>
-              </div>
+            <div class="data-row">
+              <span class="ch-label">Ch 6 (Rx)</span>
+              <span id="rx-val-5" class="ch-value">0.000</span>
             </div>
           </div>
-        </section>
+        </div>
         
       </div>
 
