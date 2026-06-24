@@ -1,0 +1,13 @@
+{
+  "name": "sim-web-interface",
+  "version": "1.0.0",
+  "description": "Real-time web interface for Buck Converter UDP simulation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.16.0"
+  }
+}
