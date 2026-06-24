@@ -12,8 +12,8 @@ LISTEN_HOST = "0.0.0.0"  # Listen on all local interfaces
 LISTEN_PORT = 25000
 INTERVAL_SEC = 0.01     # 10 ms (100 Hz frequency)
 
-# Endianness: '>' is Big-Endian (LabVIEW default)
-BYTE_ORDER = '>'
+# Endianness: '<' is Little-Endian, '>' is Big-Endian
+BYTE_ORDER = '<'
 
 # Initialize sockets
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
